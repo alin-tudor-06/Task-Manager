@@ -44,5 +44,10 @@ public class Task {
     @JoinColumn(name = "project_id",nullable = false)
     private Project project;
 
-
+    public Task(String title, String description, Status status, Project project) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.project = project;
+    }
 }

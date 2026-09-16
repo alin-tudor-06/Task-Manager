@@ -16,8 +16,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-
 public class Project {
 
     @Id
@@ -39,4 +37,9 @@ public class Project {
 
     @OneToMany(mappedBy = "project",cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
     private List<Task> taskList;
+
+    public Project(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 }

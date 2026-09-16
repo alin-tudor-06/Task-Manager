@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class ProjectMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +26,7 @@ public class ProjectMember {
 
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime joinedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",nullable = false)
@@ -37,4 +36,9 @@ public class ProjectMember {
     @JoinColumn(name = "project_id",nullable = false)
     private Project project;
 
+    public ProjectMember(Role role, User user, Project project) {
+        this.role = role;
+        this.user = user;
+        this.project = project;
+    }
 }

@@ -16,7 +16,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class User {
 
     @Id
@@ -35,4 +34,9 @@ public class User {
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
     private List<ProjectMember> projectMemberList;
+
+    public User(String username,String email){
+        this.username=username;
+        this.email=email;
+    }
 }
