@@ -1,7 +1,6 @@
 package com.alin.taskmanager.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,7 +21,7 @@ public class ProjectMember {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false,length = 20)
-    private Role role;
+    private ProjectRole projectRole;
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -36,8 +35,8 @@ public class ProjectMember {
     @JoinColumn(name = "project_id",nullable = false)
     private Project project;
 
-    public ProjectMember(Role role, User user, Project project) {
-        this.role = role;
+    public ProjectMember(ProjectRole projectRole, User user, Project project) {
+        this.projectRole = projectRole;
         this.user = user;
         this.project = project;
     }

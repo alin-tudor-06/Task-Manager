@@ -1,19 +1,17 @@
 package com.alin.taskmanager.dto;
 
-import com.alin.taskmanager.model.ProjectRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProjectMemberResponse {
+public class JwtResponse {
+    private String token;
     private String username;
-    private ProjectRole projectRole;
-    private LocalDateTime joinedAt;
+    private String role;
+
 }

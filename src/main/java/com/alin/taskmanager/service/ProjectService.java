@@ -3,7 +3,7 @@ package com.alin.taskmanager.service;
 import com.alin.taskmanager.dto.*;
 import com.alin.taskmanager.model.Project;
 import com.alin.taskmanager.model.ProjectMember;
-import com.alin.taskmanager.model.Role;
+import com.alin.taskmanager.model.ProjectRole;
 import com.alin.taskmanager.model.User;
 import com.alin.taskmanager.repository.ProjectMemberRepository;
 import com.alin.taskmanager.repository.ProjectRepository;
@@ -31,7 +31,7 @@ public class ProjectService {
     }
 
     private ProjectMemberResponse convertToDto(ProjectMember projectMember){
-        return new ProjectMemberResponse(projectMember.getUser().getUsername(),projectMember.getRole(),projectMember.getJoinedAt());
+        return new ProjectMemberResponse(projectMember.getUser().getUsername(),projectMember.getProjectRole(),projectMember.getJoinedAt());
     }
 
     private User findUserOrThrow(String username) {
@@ -52,7 +52,7 @@ public class ProjectService {
 
     private ProjectMember checkIsOwnerOrThrow(String username, Long projectId) {
         ProjectMember pm = checkIsMemberOrThrow(username, projectId);
-        if (pm.getRole() != Role.OWNER) {
+        if (pm.getProjectRole() != ProjectRole.OWNER) {
             throw new RuntimeException("Only the owner can do this");
         }
         return pm;
@@ -64,7 +64,7 @@ public class ProjectService {
         Project project = new Project(request.getTitle(),request.getDescription());
         projectRepository.save(project);
 
-        ProjectMember pm = new ProjectMember(Role.OWNER,user,project);
+        ProjectMember pm = new ProjectMember(ProjectRole.OWNER,user,project);
         projectMemberRepository.save(pm);
 
         return convertToDto(project);
@@ -87,7 +87,7 @@ public class ProjectService {
         Project project = findProjectOrThrow(projectId);
         ProjectMember pm = checkIsMemberOrThrow(requesterUsername,projectId);
 
-        if(pm.getRole().equals(Role.OWNER)){
+        if(pm.getProjectRole().equals(ProjectRole.OWNER)){
             if(request.getTitle() != null){
                 project.setTitle(request.getTitle());
             }
@@ -105,7 +105,7 @@ public class ProjectService {
         Project project = findProjectOrThrow(projectId);
         ProjectMember pm = checkIsMemberOrThrow(requesterUsername,projectId);
 
-        if(pm.getRole().equals(Role.OWNER)){
+        if(pm.getProjectRole().equals(ProjectRole.OWNER)){
             projectRepository.delete(project);
         }
         else throw new AccessDeniedException("User does not have permission to delete this project");
@@ -126,14 +126,14 @@ public class ProjectService {
         Project project = findProjectOrThrow(projectId);
         ProjectMember pm = checkIsMemberOrThrow(requesterUsername,projectId);
 
-        if(pm.getRole().equals(Role.OWNER)){
+        if(pm.getProjectRole().equals(ProjectRole.OWNER)){
             User addedUser = userRepository.findByUsername(request.getUsername()).orElseThrow(()-> new RuntimeException("The user you are trying to add does not exist"));
 
             if(projectMemberRepository.existsByUserIdAndProjectId(addedUser.getId(),projectId)){
                 throw new RuntimeException("The user you are trying to add is already a member of this project");
             }
 
-            ProjectMember addedPm = new ProjectMember(Role.MEMBER,addedUser,project);
+            ProjectMember addedPm = new ProjectMember(ProjectRole.MEMBER,addedUser,project);
             projectMemberRepository.save(addedPm);
             return convertToDto(addedPm);
         }
@@ -149,7 +149,7 @@ public class ProjectService {
         Project project = findProjectOrThrow(projectId);
         ProjectMember pm = checkIsMemberOrThrow(requesterUsername,projectId);
 
-        if(pm.getRole().equals(Role.OWNER)){
+        if(pm.getProjectRole().equals(ProjectRole.OWNER)){
             User removedUser = userRepository.findByUsername(targetUsername).orElseThrow(()-> new RuntimeException("The user you are trying to remove does not exist"));
             ProjectMember removedPm = projectMemberRepository.findByUserIdAndProjectId(removedUser.getId(),projectId).orElseThrow(()-> new RuntimeException("The user you are trying to remove is not a member of this project"));
             projectMemberRepository.delete(removedPm);

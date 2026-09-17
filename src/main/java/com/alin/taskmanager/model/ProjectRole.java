@@ -1,5 +1,5 @@
 package com.alin.taskmanager.model;
 
-public enum Role {
+public enum ProjectRole {
     MEMBER,OWNER
 }

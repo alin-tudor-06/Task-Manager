@@ -1,19 +1,20 @@
 package com.alin.taskmanager.dto;
 
-import com.alin.taskmanager.model.ProjectRole;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class ProjectMemberResponse {
+@NoArgsConstructor
+public class LoginRequest {
+    @NotBlank
     private String username;
-    private ProjectRole projectRole;
-    private LocalDateTime joinedAt;
+
+    @NotBlank
+    private String password;
+
 }
