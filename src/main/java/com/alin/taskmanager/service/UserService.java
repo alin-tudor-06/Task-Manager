@@ -2,6 +2,7 @@ package com.alin.taskmanager.service;
 
 import com.alin.taskmanager.dto.UserResponse;
 import com.alin.taskmanager.dto.UserUpdate;
+import com.alin.taskmanager.exception.NotFoundException;
 import com.alin.taskmanager.model.User;
 import com.alin.taskmanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,12 @@ public class UserService {
     }
 
     public UserResponse getByUsername(String username){
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Not found"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
         return convertToDto(user);
     }
 
     public UserResponse update(String username,UserUpdate request){
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Not found"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
 
         if(request.getEmail() != null){
             user.setEmail(request.getEmail());
